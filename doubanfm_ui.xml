@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+  <menubar name="MenuBar">
+    <menu name="FMMenu" action="FMMenu">
+      <menuitem name="FavSong" action="FavSong"/>
+      <menuitem name="DelSong" action="DelSong"/>
+      <menuitem name="SkipSong" action="SkipSong"/>
+      <menuitem name="NewPlaylist" action="NewPlaylist"/>
+      <separator/>
+      <menuitem name="ShowMiniWindow" action="ShowMiniWindow"/>
+    </menu>
+  </menubar>
+  <toolbar name="ToolBar">
+    <toolitem name="ShowMiniWindow" action="ShowMiniWindow"/>
+    <separator/>
+  </toolbar>
+</ui>
