@@ -8,4 +8,4 @@ Description = Douban FM Plugin
 Description[zh_CN] = 自动联网播放豆瓣电台的歌曲
 Authors = liberize <liberize@gmail.com>
 Copyright = Copyright © 2013 liberize
-Website = http://code.google.com/p/dbfmplugin/
+Website = https://github.com/liberize/rhythmbox-doubanfm-plugin
