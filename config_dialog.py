@@ -32,21 +32,15 @@ class ConfigDialog(GObject.Object):
 		self.ui.add_from_file(PLUGIN_DIR + DIALOG_FILE)
 
 		self.config_box = self.ui.get_object('config_box')
-		self.enable_indicator_checkbox = self.ui.get_object('enable_indicator_checkbox')
 		self.user_name_entry = self.ui.get_object('user_name_entry')
 		self.user_pwd_entry = self.ui.get_object('user_pwd_entry')
 	
 		self.settings = Gio.Settings(DOUBANFM_SCHEMA)
 		self.user_name_entry.set_text(self.settings[USER_NAME_KEY])	
 		self.user_pwd_entry.set_text(self.settings[USER_PWD_KEY])
-		self.enable_indicator_checkbox.set_active(self.settings[ENABLE_INDICATOR_KEY])
 
-		self.enable_indicator_checkbox.connect('clicked', self.on_enable_indicator_checkbox_clicked)
 		self.user_name_entry.connect('changed', self.on_user_name_entry_changed)
 		self.user_pwd_entry.connect('changed', self.on_user_pwd_entry_changed)
-		
-	def on_enable_indicator_checkbox_clicked(self, widget):
-		self.settings[ENABLE_INDICATOR_KEY] = self.enable_indicator_checkbox.get_active()
 		
 	def on_user_name_entry_changed(self, widget):
 		self.settings[USER_NAME_KEY] = self.user_name_entry.get_text()

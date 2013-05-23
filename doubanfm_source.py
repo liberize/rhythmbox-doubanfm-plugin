@@ -92,18 +92,17 @@ class DoubanFMSource(RB.BrowserSource):
 		self.db.entry_set(entry, RB.RhythmDBPropType.TITLE, song.title.encode('utf-8'))
 		self.db.entry_set(entry, RB.RhythmDBPropType.ALBUM, song.albumtitle.encode('utf-8'))
 		self.db.entry_set(entry, RB.RhythmDBPropType.ARTIST, song.artist.encode('utf-8'))
-		self.db.entry_set(entry, RB.RhythmDBPropType.RATING, song.rating_avg or 0)
 		self.db.entry_set(entry, RB.RhythmDBPropType.DURATION, song.length)
-		self.db.entry_set(entry, RB.RhythmDBPropType.BITRATE, int(song.kbps.encode('utf-8')))
-		genre = ('' if song.company == None else song.company.encode('utf-8'))
-		self.db.entry_set(entry, RB.RhythmDBPropType.GENRE, genre)
-		try:
-			year = int(song.public_time.encode('utf-8'))
-			date = datetime.date(year, 1, 1).toordinal()
+		if song.rating_avg:
+			self.db.entry_set(entry, RB.RhythmDBPropType.RATING, song.rating_avg)
+		if song.kbps:
+			self.db.entry_set(entry, RB.RhythmDBPropType.BITRATE, int(song.kbps.encode('utf-8')))
+		if song.company:
+			self.db.entry_set(entry, RB.RhythmDBPropType.GENRE, song.company.encode('utf-8'))
+		if song.public_time:
+			date = datetime.date(int(song.public_time.encode('utf-8')), 1, 1).toordinal()
 			self.db.entry_set(entry, RB.RhythmDBPropType.DATE, date)
-		except ValueError:
-			pass
-	
+
 	def reset_songs(self, songs):
 		"""
 		clear and reset all entries.
