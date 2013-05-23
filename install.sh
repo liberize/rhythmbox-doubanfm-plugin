@@ -4,12 +4,9 @@ schema_file="./org.gnome.rhythmbox.plugins.doubanfm.gschema.xml"
 icon_dir="$HOME/.local/share/icons"
 icon_file="./doubanfm.png"
 plugin_dir="$HOME/.local/share/rhythmbox/plugins"
-pulgin_folder="../doubanfm"
+pulgin_folder="$PWD"
 
 echo "copying schema file ..."
-if [ ! -d "$schema_dir" ]; then
-	sudo mkdir -p "$schema_dir"
-fi
 sudo cp "$schema_file" "$schema_dir"
 sudo glib-compile-schemas "$schema_dir"
 

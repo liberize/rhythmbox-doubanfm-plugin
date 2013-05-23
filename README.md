@@ -4,7 +4,7 @@ Rhythmbox-DoubanFM-Plugin
 Rhythmbox doubanfm plugin is a desktop client for the online music service, [Douban radio](http://douban.fm "Douban FM"). It provides full functionality of douban radio service, and linux desktop integration.
 
 Intro
------
+-------
 
 This plugin will create a source in the left sidebar of rhythmbox. When activated, you can
 
@@ -27,12 +27,14 @@ MiniWindow:
 Install
 -------
 
+Tested with rhythmbox version 2.98.
+
 Clone the repository to your local disk, and do as follows:
 
 	cd /path/to/your/folder
 	./install.sh
 
-*Notice: root privilege is required.*
+*Notice: root privilege is required because username and password are stored with gsettings.*
 
 Problems
 -------
