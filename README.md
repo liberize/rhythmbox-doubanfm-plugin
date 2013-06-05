@@ -1,10 +1,8 @@
-Rhythmbox-DoubanFM-Plugin
-======================
+# Rhythmbox-DoubanFM-Plugin
 
 Rhythmbox doubanfm plugin is a desktop client for the online music service, [Douban radio](http://douban.fm "Douban FM"). It provides full functionality of douban radio service, and linux desktop integration.
 
-Intro
--------
+## Introduction
 
 This plugin will create a source in the left sidebar of rhythmbox. When activated, you can
 
@@ -18,14 +16,13 @@ There is a minimized view for DoubanFM tracks. When activated, you can:
 
 MainWindow:
 
-![MainWindow](http://farm8.staticflickr.com/7364/8786450403_9fa0f4e67a.jpg)
+![MainWindow](http://liberize.github.io/images/rhythmbox-doubanfm-plugin-main.jpg)
 
 MiniWindow:
 
-![MiniWindow](http://farm6.staticflickr.com/5446/8797029704_94d8b58e94.jpg)
+![MiniWindow](http://liberize.github.io/images/rhythmbox-doubanfm-plugin-mini.jpg)
 
-Install
--------
+## Install
 
 Tested with rhythmbox version 2.98.
 
@@ -36,13 +33,13 @@ Clone the repository to your local disk, and do as follows:
 
 *Notice: root privilege is required because username and password are stored with gsettings.*
 
-Problems
--------
+## Problems
 
 * It may crash sometimes.
 * It may get stuck if your netspeed is not very good.
 
-Thanks
--------
+## Contact
 
-* [@sunny87](http://github.com/sunng87) and his [exaile doubanfm plugin](https://github.com/sunng87/exaile-doubanfm-plugin).
+* @liberize: <https://github.com/liberize>
+* Blog Page: <http://liberize.github.io/pages/projects/rhythmbox-doubanfm-plugin.html>
+* Email: <liberize@gmail.com>
