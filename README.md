@@ -1,4 +1,4 @@
-# Rhythmbox-DoubanFM-Plugin
+# Rhythmbox DoubanFM Plugin
 
 Rhythmbox doubanfm plugin is a desktop client for the online music service, [Douban radio](http://douban.fm "Douban FM"). It provides full functionality of douban radio service, and linux desktop integration.
 
