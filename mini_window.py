@@ -16,8 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import os, urllib
-from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GLib, Pango, RB
+import os, urllib, thread
+from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, Pango, RB, GLib
 from doubanfm_keys import *
 
 WINDOW_FILE = 'mini_window.glade'
@@ -162,16 +162,18 @@ class MiniWindow(GObject.Object):
 		self.shell.quit()
 
 	def on_fav_song(self, *e):
-		self.fav_button.set_image(self.button_images['nofav'] if self.current_song.like else
-				self.button_images['fav'])
-		GLib.idle_add(self.source.unfav_song if self.current_song.like else
-				self.source.fav_song, self.current_song)
+		if self.current_song.like:
+			self.fav_button.set_image(self.button_images['nofav'])
+			self.source.unfav_song(self.current_song)
+		else:
+			self.fav_button.set_image(self.button_images['fav'])
+			self.source.fav_song(self.current_song)
 
 	def on_skip_song(self, *e):
-		GLib.idle_add(self.source.skip_song, self.current_song)
+		self.source.skip_song(self.current_song)
 
 	def on_del_song(self, *e):
-		GLib.idle_add(self.source.del_song, self.current_song)
+		self.source.del_song(self.current_song)
 
 	def on_go_home(self, *e):
 		self.set_visibile(False)
@@ -212,9 +214,9 @@ class MiniWindow(GObject.Object):
 			self.song_info_label.set_label(self.current_song.albumtitle.encode('utf-8'))
 			self.fav_button.set_image(self.button_images['fav'] if self.current_song.like else
 				self.button_images['nofav'])
-			GLib.idle_add(self.update_cover_image)
+			thread.start_new_thread(self.update_cover_image, ())
 		else:
-			GLib.idle_add(self.source.new_playlist)
+			self.source.new_playlist()
 
 	def on_elapsed_changed(self, player, elapsed):
 		if self.current_song != None:
@@ -222,7 +224,7 @@ class MiniWindow(GObject.Object):
 				self.play_pos = float(elapsed) / float(self.current_song.length)
 				self.play_time_scale.set_value(self.play_pos)
 			if elapsed == self.current_song.length:
-				GLib.idle_add(self.source.played_song, self.current_song)
+				self.source.played_song(self.current_song)
 
 	def on_pause(self, *e):
 		self.player.playpause(True)
@@ -234,9 +236,11 @@ class MiniWindow(GObject.Object):
 
 	def update_cover_image(self):
 		url = self.current_song.picture
-		response = urllib.urlopen(url)
+		GLib.idle_add(self.update_cover_image_cb, urllib.urlopen(url).read())
+
+	def update_cover_image_cb(self, data):
 		loader = GdkPixbuf.PixbufLoader()
-		loader.write(response.read())
+		loader.write(data)
 		loader.close()
 		self.cover_image.set_from_pixbuf(loader.get_pixbuf())
 

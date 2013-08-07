@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Gio, GObject, RB, Peas, PeasGtk, GLib
+from gi.repository import Gtk, Gio, GObject, RB, Peas, PeasGtk
 from doubanfm_keys import *
 from doubanfm_source import DoubanFMSource
 from config_dialog import ConfigDialog
@@ -166,21 +166,24 @@ class DoubanFMPlugin(GObject.Object, Peas.Activatable, PeasGtk.Configurable):
 		self.mini_window.set_visibile(True)
 
 	def on_set_channel(self, action, channel_id):
-		GLib.idle_add(self.source.set_channel, channel_id)
+		self.source.set_channel(channel_id)
 
 	def on_fav_song(self, action):
-		self.actions[1].set_label('喜欢(_F)' if self.current_song.like else '取消喜欢(_U)')
-		GLib.idle_add(self.source.unfav_song if self.current_song.like else
-				self.source.fav_song, self.current_song)
+		if self.current_song.like:
+			self.actions[1].set_label('喜欢(_F)')
+		 	self.source.unfav_song(self.current_song)
+		else:
+			self.actions[1].set_label('取消喜欢(_U)')
+			self.source.fav_song(self.current_song)
 
 	def on_del_song(self, action):
-		GLib.idle_add(self.source.del_song, self.current_song)
+		self.source.del_song(self.current_song)
 
 	def on_skip_song(self, action):
-		GLib.idle_add(self.source.skip_song, self.current_song)
+		self.source.skip_song(self.current_song)
 
 	def on_new_playlist(self, action):
-		GLib.idle_add(self.source.new_playlist)
+		self.source.new_playlist()
 
 	def initialize(self):
 		entry = self.player.get_playing_entry()
@@ -197,9 +200,9 @@ class DoubanFMPlugin(GObject.Object, Peas.Activatable, PeasGtk.Configurable):
 			self.current_song = self.source.get_song_by_title(song_title)
 			self.actions[1].set_label('取消喜欢(_U)' if self.current_song.like else '喜欢(_F)')
 		else:
-			GLib.idle_add(self.source.new_playlist)
+			self.source.new_playlist()
 
 	def on_elapsed_changed(self, player, elapsed):
 		if self.current_song != None:
 			if elapsed == self.current_song.length:
-				GLib.idle_add(self.source.played_song, self.current_song)
+				self.source.played_song(self.current_song)

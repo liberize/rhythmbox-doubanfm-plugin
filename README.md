@@ -6,12 +6,13 @@ Rhythmbox doubanfm plugin is a desktop client for the online music service, [Dou
 
 This plugin will create a source in the left sidebar of rhythmbox. When activated, you can
 
-* Mark a song as favorite, skip a song, delete a song and refresh playlist through main menu.
-* Switch between channels in the right sidebar.
+* Like/skip/del a song and refresh playlist.
+* Switch channel in the right sidebar.
 
 There is a minimized view for DoubanFM tracks. When activated, you can:
 
-* Douban covers support, automatically retrieve album art from douban.com.
+* Control music playing, like/skip/del a song and set window to keep above.
+* Automatically retrieve and display album art from douban.com.
 * Share music and album to douban, sina, kaixin001, renren, fanfou and twitter.
 
 MainWindow:
@@ -24,7 +25,7 @@ MiniWindow:
 
 ## Install
 
-Tested with rhythmbox version 2.98.
+Tested with rhythmbox **version 2.98**.
 
 Clone the repository to your local disk, and do as follows:
 
@@ -33,13 +34,8 @@ Clone the repository to your local disk, and do as follows:
 
 *Notice: root privilege is required because username and password are stored with gsettings.*
 
-## Problems
-
-* It may crash sometimes.
-* It may get stuck if your netspeed is not very good.
-
 ## Contact
 
 * @liberize: <https://github.com/liberize>
-* Blog Page: <http://liberize.github.io/pages/projects/rhythmbox-doubanfm-plugin.html>
+* Blog Page: <http://liberize.github.io/>
 * Email: <liberize@gmail.com>

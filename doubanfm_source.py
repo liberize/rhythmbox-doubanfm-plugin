@@ -18,7 +18,7 @@
 
 from gi.repository import GObject, RB, GLib
 from login_dialog import LoginDialog
-import datetime
+import datetime, thread
 
 SOURCE_NAME = '豆瓣电台'
 
@@ -66,7 +66,6 @@ class DoubanFMSource(RB.BrowserSource):
 		refresh playlist when logged in successfully.
 		"""
 		self.doubanfm = doubanfm
-		self.new_playlist()
 		self.plugin.change_menu_item_state(True)
 
 	def set_channel(self, channel):
@@ -125,57 +124,57 @@ class DoubanFMSource(RB.BrowserSource):
 		if self.player.get_playing_entry() == None:
 			self.player.set_playing_source(self)
 			self.player.do_next()
-		
+
 	def new_playlist(self):
 		"""
 		get a new playlist.
 		"""
-		songs = self.doubanfm.new_playlist(self.history)
-		self.reset_songs(songs)
-		
+		thread.start_new_thread(self.doubanfm.new_playlist, (self.history,
+			self.reset_songs))
+
 	def del_song(self, song):
 		"""
 		delete a song (mark as 'never play') by its title.
 		"""
 		sids = [each.sid for each in self.songs]
 		next = sids.index(song.sid) + 1
-		songs = self.doubanfm.del_song(song.sid, song.aid, sids[next:])
-		self.reset_songs(songs)
+		thread.start_new_thread(self.doubanfm.del_song, (song.sid, song.aid,
+			sids[next:], self.reset_songs))
 
 	def fav_song(self, song):
 		"""
 		favor a song (mark as 'like') by its title.
 		"""
-		self.doubanfm.fav_song(song.sid, song.aid)
+		thread.start_new_thread(self.doubanfm.fav_song, (song.sid, song.aid))
 		song.like = True
 
 	def unfav_song(self, song):
 		"""
 		unfavor a song (remove 'like' mark) by its title.
 		"""
-		self.doubanfm.unfav_song(song.sid, song.aid)
+		thread.start_new_thread(self.doubanfm.unfav_song, (song.sid, song.aid))
 		song.like = False
 
 	def skip_song(self, song):
 		"""
 		skip a song by its title.
 		"""
-		songs = self.doubanfm.skip_song(song.sid, song.aid, self.history)
-		self.reset_songs(songs)
+		thread.start_new_thread(self.doubanfm.skip_song, (song.sid, song.aid,
+			self.history, self.reset_songs))
 		self.history.append((song.sid, 's'))
 
 	def played_song(self, song):
 		"""
 		mark a song as 'played'.
 		"""
-		self.doubanfm.played_song(song.sid, song.aid)
+		thread.start_new_thread(self.doubanfm.played_song, (song.sid, song.aid))
 		self.history.append((song.sid, 'p'))
 		
 	def played_list(self, song):
 		"""
 		playlist ended. request more songs.
 		"""
-		songs = self.doubanfm.played_list(song.sid, self.history)
-		self.reset_songs(songs)
+		thread.start_new_thread(self.doubanfm.played_list, (song.sid, self.history,
+			self.reset_songs))
 		
 GObject.type_register(DoubanFMSource)

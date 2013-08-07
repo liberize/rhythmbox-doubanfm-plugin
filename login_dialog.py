@@ -16,8 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import urllib, socket
-from gi.repository import Gio, Gtk, GdkPixbuf, GObject, GLib
+import urllib, socket, thread
+from gi.repository import Gio, Gtk, Gdk, GdkPixbuf, GObject, GLib
 from libdoubanfm import *
 from doubanfm_keys import *
 
@@ -39,7 +39,7 @@ class LoginDialog(GObject.Object):
 	def __init__(self, shell):
 		GObject.Object.__init__(self)
 		self.shell = shell
-
+		
 		self.ui = Gtk.Builder()
 		self.ui.add_from_file(PLUGIN_DIR + DIALOG_FILE)
 
@@ -49,55 +49,67 @@ class LoginDialog(GObject.Object):
 		self.captcha_entry = self.ui.get_object('captcha_entry')
 		
 		self.ok_button.connect('clicked', self.on_ok_button_clicked)
-		
+		self.captcha_entry.connect('key-press-event', self.on_captcha_entry_key_pressed)
+
 	def on_ok_button_clicked(self, widget):
 		captcha_solution = self.captcha_entry.get_text()
 		self.login_dialog.hide()
-		GLib.idle_add(self.try_login, captcha_solution)
+		thread.start_new_thread(self.doubanfm.login, (self.captcha_id, captcha_solution,
+			self.login_cb))
+
+	def on_captcha_entry_key_pressed(self, widget, event):
+		if Gdk.keyval_name(event.keyval) == 'Return':
+			self.ok_button.emit('clicked')
 
 	def get_captcha_image(self):
 		"""
 		download captcha image.
 		"""
 		captcha_url = "http://www.douban.com/misc/captcha?id=%s&amp;size=s" % self.captcha_id
-		response = urllib.urlopen(captcha_url)
+		GLib.idle_add(self.get_captcha_image_cb, urllib.urlopen(captcha_url).read())
+
+	def get_captcha_image_cb(self, data):
+		"""
+		callback function.
+		"""
 		loader = GdkPixbuf.PixbufLoader()
-		loader.write(response.read())
+		loader.write(data)
 		loader.close()
 		self.captcha_image.set_from_pixbuf(loader.get_pixbuf())
-
-	def try_login(self, captcha_solution=None):
-		"""
-		try to login. show a dialog if captcha is needed.
-		"""
-		try:
-			doubanfm = DoubanFM(self.shell.props.shell_player, self.user_name,
-				self.user_pwd, self.captcha_id, captcha_solution)
-			self.emit('login-completed', doubanfm)
-		except DoubanLoginException as e:
-			if 'captcha_id' not in e.data or e.data['captcha_id'] == None:
-				self.error_dialog(ERROR_LOGIN_FAILED)
-			else:
-				self.captcha_id = e.data['captcha_id']
-				self.captcha_entry.set_text('')
-				GLib.idle_add(self.get_captcha_image)
-				self.login_dialog.show_all()
-		except socket.error:
-			self.error_dialog(ERROR_SOCKET_EXECPTION)
 
 	def login(self):
 		"""
 		login to douban.fm with user name and password.
 		"""
 		settings = Gio.Settings(DOUBANFM_SCHEMA)
-		self.user_name = settings[USER_NAME_KEY]
-		self.user_pwd = settings[USER_PWD_KEY]
-		self.captcha_id = None
+		username = settings[USER_NAME_KEY]
+		password = settings[USER_PWD_KEY]
 
-		if self.user_name == '' or self.user_pwd == '':
+		if username == '' or password == '':
 			self.error_dialog(ERROR_USER_INFO_NOT_SET)
 		else:
-			GLib.idle_add(self.try_login)
+			self.doubanfm = DoubanFM(self.shell.props.shell_player, username, password)
+			thread.start_new_thread(self.doubanfm.login, (None, None, self.login_cb))
+
+	def login_cb(self, exception):
+		"""
+		callback function.
+		"""
+		if exception == None:
+			self.emit('login-completed', self.doubanfm)
+		else:
+			try:
+				raise exception
+			except DoubanLoginException as e:
+				if 'captcha_id' not in e.data or e.data['captcha_id'] == None:
+					self.error_dialog(ERROR_LOGIN_FAILED)
+				else:
+					self.captcha_id = e.data['captcha_id']
+					self.captcha_entry.set_text('')
+					thread.start_new_thread(self.get_captcha_image, ())
+					self.login_dialog.show_all()
+			except socket.error:
+				self.error_dialog(ERROR_SOCKET_EXECPTION)
 
 	def error_dialog(self, error_msg):
 		"""

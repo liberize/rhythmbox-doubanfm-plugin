@@ -22,8 +22,8 @@
           <object class="GtkLabel" id="label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_top">12</property>
-            <property name="margin_bottom">12</property>
+            <property name="margin_top">13</property>
+            <property name="margin_bottom">13</property>
             <property name="label" translatable="yes">频道列表</property>
           </object>
           <packing>
@@ -49,11 +49,15 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="model">channels_liststore</property>
+            <property name="fixed_height_mode">True</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="channels_selection"/>
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="id_column">
+                <property name="resizable">True</property>
+                <property name="sizing">fixed</property>
+                <property name="fixed_width">45</property>
                 <property name="title" translatable="yes">ID</property>
                 <property name="clickable">True</property>
                 <child>
@@ -66,6 +70,8 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="channels_column">
+                <property name="resizable">True</property>
+                <property name="sizing">fixed</property>
                 <property name="title" translatable="yes">频道</property>
                 <property name="clickable">True</property>
                 <child>

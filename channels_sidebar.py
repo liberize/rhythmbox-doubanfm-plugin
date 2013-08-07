@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Gio, GObject, GLib
+from gi.repository import Gtk, Gio, GObject
 from doubanfm_keys import *
 
 SIDEBAR_FILE = 'channels_sidebar.glade'
@@ -36,17 +36,19 @@ class ChannelsSidebar(GObject.Object):
 		self.channels_treeview = self.ui.get_object('channels_treeview')
 		self.channels_liststore = self.ui.get_object('channels_liststore')
 
-		tree_selection = self.channels_treeview.get_selection()
-		tree_selection.connect("changed", self.on_tree_selection_changed)
+		self.tree_selection = self.channels_treeview.get_selection()
+		self.tree_selection.connect("changed", self.on_tree_selection_changed)
 		self.source.login_dialog.connect('login-completed', self.on_login_completed)
 		
 	def on_tree_selection_changed(self, selection):
 		model, treeiter = selection.get_selected()
 		if treeiter != None:
-			GLib.idle_add(self.source.set_channel, model[treeiter][0])
+			self.source.set_channel(model[treeiter][0])
 
 	def on_login_completed(self, dialog, doubanfm):
 		# add channels via source
-		channels = doubanfm.channels
-		for channel_id in sorted(channels):
-			self.channels_liststore.append([channel_id, channels[channel_id]])
+		channels = sorted(doubanfm.channels)
+		for channel_id in channels:
+			self.channels_liststore.append([channel_id, doubanfm.channels[channel_id]])
+			if channel_id == doubanfm.channel:
+				self.tree_selection.select_path(Gtk.TreePath([channels.index(channel_id)]))
