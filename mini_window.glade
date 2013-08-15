@@ -42,6 +42,10 @@
           <object class="GtkEventBox" id="eventbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">5</property>
+            <property name="margin_right">10</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
             <signal name="button-press-event" handler="on_cover_button_press" swapped="no"/>
             <child>
               <object class="GtkImage" id="cover_image">
@@ -269,8 +273,8 @@ audio-volume-medium</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">返回主窗口</property>
                     <property name="focus_on_click">False</property>
-                    <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                     <accelerator key="g" signal="activate"/>
+                    <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                     <signal name="clicked" handler="on_go_home" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="image4">

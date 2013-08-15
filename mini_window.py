@@ -212,7 +212,6 @@ class MiniWindow(GObject.Object):
 			self.song_info_str = ('< %s >  %s' % (self.current_song.albumtitle, self.current_song.public_time)
 				).encode('utf-8')
 			self.song_url = self.current_song.get_uri()
-			self.album_url = 'http://music.douban.com' + self.current_song.album
 			self.mini_window.set_title(self.song_title_str + ' - Rhythmbox 豆瓣FM')
 			self.song_title_label.set_label(self.song_title_str)
 			self.song_info_label.set_label(self.song_info_str)
@@ -250,7 +249,7 @@ class MiniWindow(GObject.Object):
 
 	def on_cover_button_press(self, widget, event):
 		if event.type == Gdk.EventType._2BUTTON_PRESS and event.button == Gdk.BUTTON_PRIMARY:
-			os.popen(' '.join(['xdg-open', self.album_url]))
+			self.on_album()
 
 	def on_settings(self, *e):
 		os.popen(' '.join(['xdg-open', 'http://douban.fm/mine']))
