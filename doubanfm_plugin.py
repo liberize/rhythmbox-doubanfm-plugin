@@ -41,17 +41,11 @@ class DoubanFMPlugin(GObject.Object, Peas.Activatable, PeasGtk.Configurable):
 		self.mini_window = None
 
 	def do_create_configure_widget(self):
-		"""
-		Show a dialog when the preferrence button is being clicked.
-		"""
 		if self.config_dialog == None:
 			self.config_dialog = ConfigDialog()
 		return self.config_dialog.config_box
 
 	def do_activate(self):
-		"""
-		Do some initialization work when the plugin is being activated.
-		"""
 		self.shell = self.object
 		self.player = self.shell.props.shell_player
 
@@ -87,9 +81,6 @@ class DoubanFMPlugin(GObject.Object, Peas.Activatable, PeasGtk.Configurable):
 		self.set_handle_signals(True)
 		
 	def do_deactivate(self):
-		"""
-		Do some clean work when the plugin is being deactivated.
-		"""
 		self.ui_manager.remove_ui(self.ui_merge_id)
 		self.ui_manager.remove_action_group(self.action_group)
 		self.ui_manager.ensure_update()
@@ -116,9 +107,6 @@ class DoubanFMPlugin(GObject.Object, Peas.Activatable, PeasGtk.Configurable):
 				self.player.disconnect(handler)
 
 	def build_actions(self):
-		"""
-		create actions and add them to action group.
-		"""
 		self.actions = [
 			Gtk.Action('FMMenu', '豆瓣FM(_D)', None, None),
 			Gtk.Action('FavSong', '喜欢(_F)', None, None),

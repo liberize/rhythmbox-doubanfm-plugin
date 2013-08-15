@@ -38,9 +38,6 @@ class DoubanFMSource(RB.BrowserSource):
 		self.login_dialog = None
 	
 	def do_selected(self):
-		"""
-		do some work when this source is selected.
-		"""
 		if not self.activated:
 			self.activated = True
 			self.shell = self.props.shell
@@ -56,35 +53,20 @@ class DoubanFMSource(RB.BrowserSource):
 		self.plugin.show_sidebar(True)
 		
 	def do_deselected(self):
-		"""
-		do some work when this source is deselected.
-		"""
 		self.plugin.show_sidebar(False)
 		
 	def on_login_completed(self, dialog, doubanfm):
-		"""
-		refresh playlist when logged in successfully.
-		"""
 		self.doubanfm = doubanfm
 		self.plugin.change_menu_item_state(True)
 
 	def set_channel(self, channel):
-		"""
-		set current channel.
-		"""
 		self.doubanfm.channel = channel
 		self.new_playlist()
 
 	def get_song_by_title(self, song_title):
-		"""
-		get a song by its title.
-		"""
 		return self.songs_map.get(song_title.decode('utf-8'), None)
 
 	def add_song(self, song):
-		"""
-		add a new entry for a song.
-		"""
 		entry = self.db.entry_lookup_by_location(song.url)
 		if entry == None:
 			entry = RB.RhythmDBEntry.new(self.db, self.entry_type, song.url)
@@ -103,9 +85,6 @@ class DoubanFMSource(RB.BrowserSource):
 			self.db.entry_set(entry, RB.RhythmDBPropType.DATE, date)
 
 	def reset_songs(self, songs):
-		"""
-		clear and reset all entries.
-		"""
 		for row in self.props.query_model:
 			entry = row[0]
 			self.db.entry_delete(entry)
@@ -118,62 +97,44 @@ class DoubanFMSource(RB.BrowserSource):
 		GLib.idle_add(self.start_playing)
 		
 	def start_playing(self):
-		"""
-		start playing from the beginning.
-		"""
 		if self.player.get_playing_entry() == None:
 			self.player.set_playing_source(self)
 			self.player.do_next()
 
 	def new_playlist(self):
-		"""
-		get a new playlist.
-		"""
 		thread.start_new_thread(self.doubanfm.new_playlist, (self.history,
 			self.reset_songs))
 
 	def del_song(self, song):
-		"""
-		delete a song (mark as 'never play') by its title.
-		"""
 		sids = [each.sid for each in self.songs]
 		next = sids.index(song.sid) + 1
 		thread.start_new_thread(self.doubanfm.del_song, (song.sid, song.aid,
 			sids[next:], self.reset_songs))
 
 	def fav_song(self, song):
-		"""
-		favor a song (mark as 'like') by its title.
-		"""
 		thread.start_new_thread(self.doubanfm.fav_song, (song.sid, song.aid))
 		song.like = True
 
 	def unfav_song(self, song):
-		"""
-		unfavor a song (remove 'like' mark) by its title.
-		"""
 		thread.start_new_thread(self.doubanfm.unfav_song, (song.sid, song.aid))
 		song.like = False
 
 	def skip_song(self, song):
-		"""
-		skip a song by its title.
-		"""
 		thread.start_new_thread(self.doubanfm.skip_song, (song.sid, song.aid,
 			self.history, self.reset_songs))
-		self.history.append((song.sid, 's'))
+		if (song.sid, 's') not in self.history:
+			self.history.insert(0, (song.sid, 's'))
+			if len(self.history) > 20:
+				self.history.pop()
 
 	def played_song(self, song):
-		"""
-		mark a song as 'played'.
-		"""
 		thread.start_new_thread(self.doubanfm.played_song, (song.sid, song.aid))
-		self.history.append((song.sid, 'p'))
+		if (song.sid, 'p') not in self.history:
+			self.history.insert(0, (song.sid, 'p'))
+			if len(self.history) > 20:
+				self.history.pop()
 		
 	def played_list(self, song):
-		"""
-		playlist ended. request more songs.
-		"""
 		thread.start_new_thread(self.doubanfm.played_list, (song.sid, self.history,
 			self.reset_songs))
 		

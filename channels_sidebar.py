@@ -51,4 +51,4 @@ class ChannelsSidebar(GObject.Object):
 		for channel_id in channels:
 			self.channels_liststore.append([channel_id, doubanfm.channels[channel_id]])
 			if channel_id == doubanfm.channel:
-				self.tree_selection.select_path(Gtk.TreePath([channels.index(channel_id)]))
+				self.tree_selection.select_path(Gtk.TreePath(str(channels.index(channel_id))))

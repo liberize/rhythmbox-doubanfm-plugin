@@ -152,7 +152,7 @@ class DoubanFM(object):
 		if sidlist is None or len(sidlist) == 0:
 			return ''
 		elif withtag:
-			return '|'.join([str(s)+':'+t for (s, t) in sidlist])
+			return '|'.join(['%s:%s' % s for s in sidlist])
 		else:
 			return '|'.join([str(s) for s in sidlist])
 
@@ -203,7 +203,7 @@ class DoubanFM(object):
 		"""
 		if self.lock.acquire(0):
 			params = self.__get_default_params('n')
-			params['h'] = self.__format_list(history[-20:])
+			params['h'] = self.__format_list(history)
 
 			results = self.__remote_fm(params)
 			GLib.idle_add(callback, map(self.json_to_douban_tracks, json.loads(results)['song']))
@@ -216,13 +216,15 @@ class DoubanFM(object):
 		* aid - album id
 		* rest - rest song ids in current playlist
 		"""
-		params = self.__get_default_params('b')
-		params['sid'] = sid
-		params['aid'] = aid
-		params['rest'] = self.__format_list(rest, False)
+		if self.lock.acquire(0):
+			params = self.__get_default_params('b')
+			params['sid'] = sid
+			params['aid'] = aid
+			params['rest'] = self.__format_list(rest, False)
 
-		results = self.__remote_fm(params)
-		GLib.idle_add(callback, map(self.json_to_douban_tracks, json.loads(results)['song']))
+			results = self.__remote_fm(params)
+			GLib.idle_add(callback, map(self.json_to_douban_tracks, json.loads(results)['song']))
+			self.lock.release()
 
 	def fav_song(self, sid, aid):
 		"""
@@ -256,13 +258,15 @@ class DoubanFM(object):
 		* aid - album id
 		* history - your playlist history (played songs and skipped songs)
 		"""
-		params = self.__get_default_params('s')
-		params['h'] = self.__format_list(history[-20:])
-		params['sid'] = sid
-		params['aid'] = aid
+		if self.lock.acquire(0):
+			params = self.__get_default_params('s')
+			params['h'] = self.__format_list(history)
+			params['sid'] = sid
+			params['aid'] = aid
 
-		results = self.__remote_fm(params)
-		GLib.idle_add(callback, map(self.json_to_douban_tracks, json.loads(results)['song']))
+			results = self.__remote_fm(params)
+			GLib.idle_add(callback, map(self.json_to_douban_tracks, json.loads(results)['song']))
+			self.lock.release()
 
 	def played_song(self, sid, aid):
 		"""
@@ -281,9 +285,11 @@ class DoubanFM(object):
 		request more playlist items
 		* history - your playlist history(played songs and skipped songs)
 		"""
-		params = self.__get_default_params('p')
-		params['h'] = self.__format_list(history[-20:])
-		params['sid'] = sid
+		if self.lock.acquire(0):
+			params = self.__get_default_params('p')
+			params['h'] = self.__format_list(history)
+			params['sid'] = sid
 
-		results = self.__remote_fm(params)
-		GLib.idle_add(callback, map(self.json_to_douban_tracks, json.loads(results)['song']))
+			results = self.__remote_fm(params)
+			GLib.idle_add(callback, map(self.json_to_douban_tracks, json.loads(results)['song']))
+			self.lock.release()

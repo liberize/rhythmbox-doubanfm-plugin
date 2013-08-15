@@ -62,25 +62,16 @@ class LoginDialog(GObject.Object):
 			self.ok_button.emit('clicked')
 
 	def get_captcha_image(self):
-		"""
-		download captcha image.
-		"""
 		captcha_url = "http://www.douban.com/misc/captcha?id=%s&amp;size=s" % self.captcha_id
 		GLib.idle_add(self.get_captcha_image_cb, urllib.urlopen(captcha_url).read())
 
 	def get_captcha_image_cb(self, data):
-		"""
-		callback function.
-		"""
 		loader = GdkPixbuf.PixbufLoader()
 		loader.write(data)
 		loader.close()
 		self.captcha_image.set_from_pixbuf(loader.get_pixbuf())
 
 	def login(self):
-		"""
-		login to douban.fm with user name and password.
-		"""
 		settings = Gio.Settings(DOUBANFM_SCHEMA)
 		username = settings[USER_NAME_KEY]
 		password = settings[USER_PWD_KEY]
@@ -92,9 +83,6 @@ class LoginDialog(GObject.Object):
 			thread.start_new_thread(self.doubanfm.login, (None, None, self.login_cb))
 
 	def login_cb(self, exception):
-		"""
-		callback function.
-		"""
 		if exception == None:
 			self.emit('login-completed', self.doubanfm)
 		else:
@@ -112,9 +100,6 @@ class LoginDialog(GObject.Object):
 				self.error_dialog(ERROR_SOCKET_EXECPTION)
 
 	def error_dialog(self, error_msg):
-		"""
-		show a dialog when error occurred.
-		"""
 		dialog = Gtk.MessageDialog(self.shell.props.window, 0, Gtk.MessageType.ERROR,
 				Gtk.ButtonsType.CLOSE, error_msg[0])
 		dialog.format_secondary_text(error_msg[1])
