@@ -43,8 +43,9 @@ class MiniWindow(GObject.Object):
 			'on_go_home': self.on_go_home,
 			'on_volume_changed': self.on_volume_changed,
 			'on_change_play_time': self.on_change_play_time,
-			'on_button_press': self.on_button_press,
-			'on_button_release': self.on_button_release,
+			'on_play_time_button_press': self.on_play_time_button_press,
+			'on_play_time_button_release': self.on_play_time_button_release,
+			'on_cover_button_press': self.on_cover_button_press,
 			'on_settings': self.on_settings,
 			'on_album': self.on_album,
 			'on_report': self.on_report,
@@ -184,14 +185,14 @@ class MiniWindow(GObject.Object):
 	def on_format_value(self, scale, value):
 		if self.current_song != None:
 			pos_in_secs = int(value * self.current_song.length)
-			return '%02d:%02d/%s' % (pos_in_secs / 60, pos_in_secs % 60,
+			return '%02d:%02d/%s ' % (pos_in_secs / 60, pos_in_secs % 60,
 				self.formatted_song_length)
 		return ''
 
-	def on_button_press(self, *e):
+	def on_play_time_button_press(self, *e):
 		self.button_down = True
 
-	def on_button_release(self, *e):
+	def on_play_time_button_release(self, *e):
 		self.button_down = False
 
 	def on_change_play_time(self, *e):
@@ -206,12 +207,15 @@ class MiniWindow(GObject.Object):
 			self.current_song = self.source.get_song_by_title(title)
 			self.formatted_song_length = '%02d:%02d' % (self.current_song.length / 60,
 				self.current_song.length % 60)
-			self.song_str = (self.current_song.title + ' - ' + self.current_song.artist
+			self.song_title_str = ('%s - %s' % (self.current_song.title, self.current_song.artist)
 				).encode('utf-8')
-			self.song_uri = self.current_song.get_uri()
-			self.mini_window.set_title('Rhythmbox 豆瓣FM ' + self.song_str)
-			self.song_title_label.set_label(self.song_str)
-			self.song_info_label.set_label(self.current_song.albumtitle.encode('utf-8'))
+			self.song_info_str = ('< %s >  %s' % (self.current_song.albumtitle, self.current_song.public_time)
+				).encode('utf-8')
+			self.song_url = self.current_song.get_uri()
+			self.album_url = 'http://music.douban.com' + self.current_song.album
+			self.mini_window.set_title(self.song_title_str + ' - Rhythmbox 豆瓣FM')
+			self.song_title_label.set_label(self.song_title_str)
+			self.song_info_label.set_label(self.song_info_str)
 			self.fav_button.set_image(self.button_images['fav'] if self.current_song.like else
 				self.button_images['nofav'])
 			thread.start_new_thread(self.update_cover_image, ())
@@ -244,6 +248,10 @@ class MiniWindow(GObject.Object):
 		loader.close()
 		self.cover_image.set_from_pixbuf(loader.get_pixbuf())
 
+	def on_cover_button_press(self, widget, event):
+		if event.type == Gdk.EventType._2BUTTON_PRESS and event.button == Gdk.BUTTON_PRIMARY:
+			os.popen(' '.join(['xdg-open', self.album_url]))
+
 	def on_settings(self, *e):
 		os.popen(' '.join(['xdg-open', 'http://douban.fm/mine']))
 
@@ -268,33 +276,33 @@ class MiniWindow(GObject.Object):
 
 	def on_share_sina(self, *e):
 		url = self.share_templates['sina'] % tuple(map(urllib.quote_plus, 
-			[self.song_uri, self.song_str, self.current_song.picture]))
+			[self.song_url, self.song_title_str, self.current_song.picture]))
 		os.popen(' '.join(['xdg-open', '"%s"' % url]))
 
 	def on_share_kaixin001(self, *e):
 		url = self.share_templates['kaixin001'] % tuple(map(urllib.quote_plus,
-			[self.song_uri, self.song_str]))
+			[self.song_url, self.song_title_str]))
 		os.popen(' '.join(['xdg-open', '"%s"' % url]))
 
 	def on_share_renren(self, *e):
 		url = self.share_templates['renren'] % tuple(map(urllib.quote_plus,
-			[self.song_str, self.song_uri]))
+			[self.song_title_str, self.song_url]))
 		os.popen(' '.join(['xdg-open', '"%s"' % url]))
 
 	def on_share_twitter(self, *e):
 		url = self.share_templates['twitter'] % tuple(map(urllib.quote_plus,
-			[self.song_str, self.song_uri]))
+			[self.song_title_str, self.song_url]))
 		os.popen(' '.join(['xdg-open', '"%s"' % url]))
 
 	def on_share_fanfou(self, *e):
 		url = self.share_templates['fanfou'] % tuple(map(urllib.quote_plus,
-			[self.song_uri, self.song_str]))
+			[self.song_url, self.song_title_str]))
 		os.popen(' '.join(['xdg-open', '"%s"' % url]))
 
 	def on_recommend_song(self, *e):
 		url = self.share_templates['douban'] % tuple(map(urllib.quote_plus, [
 				self.current_song.title.encode('utf8'),
-				self.song_uri,
+				self.song_url,
 				self.current_song.picture,
 				"Rhythmbox DoubanFM Plugin",
 				self.current_song.sid
@@ -303,4 +311,4 @@ class MiniWindow(GObject.Object):
 
 	def on_copy_permalink(self, *e):
 		clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-		clipboard.set_text(self.song_uri, -1)
+		clipboard.set_text(self.song_url, -1)
