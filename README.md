@@ -17,11 +17,11 @@ There is a minimized view for DoubanFM tracks. When activated, you can:
 
 MainWindow:
 
-![MainWindow](http://liberize.github.io/images/rhythmbox-doubanfm-plugin-main.jpg)
+![MainWindow](http://liberize.u.qiniudn.com/rhythmbox-doubanfm-plugin-main.jpg)
 
 MiniWindow:
 
-![MiniWindow](http://liberize.github.io/images/rhythmbox-doubanfm-plugin-mini.jpg)
+![MiniWindow](http://liberize.u.qiniudn.com/rhythmbox-doubanfm-plugin-mini.jpg)
 
 ## Install
 
@@ -37,5 +37,5 @@ Clone the repository to your local disk, and do as follows:
 ## Contact
 
 * @liberize: <https://github.com/liberize>
-* Blog Page: <http://liberize.github.io/>
+* Blog Page: <http://liberize.me/>
 * Email: <liberize@gmail.com>
