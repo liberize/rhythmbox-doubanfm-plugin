@@ -17,11 +17,11 @@ There is a minimized view for DoubanFM tracks. When activated, you can:
 
 MainWindow:
 
-![MainWindow](http://liberize.u.qiniudn.com/rhythmbox-doubanfm-plugin-main.jpg)
+![MainWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/images/main.jpg)
 
 MiniWindow:
 
-![MiniWindow](http://liberize.u.qiniudn.com/rhythmbox-doubanfm-plugin-mini.jpg)
+![MiniWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/images/mini.jpg)
 
 ## Install
 
