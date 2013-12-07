@@ -25,7 +25,7 @@ MiniWindow:
 
 ## Install
 
-Tested with rhythmbox **version 2.98**.
+Tested with rhythmbox **version 2.96, 2.98**.
 
 Clone the repository to your local disk, and do as follows:
 
