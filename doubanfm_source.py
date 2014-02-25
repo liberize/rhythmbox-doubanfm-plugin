@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright (C) 2013 liberize <liberize@gmail.com>
 #
@@ -67,9 +67,7 @@ class DoubanFMSource(RB.BrowserSource):
 		return self.songs_map.get(song_title.decode('utf-8'), None)
 
 	def add_song(self, song):
-		entry = self.db.entry_lookup_by_location(song.url)
-		if entry == None:
-			entry = RB.RhythmDBEntry.new(self.db, self.entry_type, song.url)
+		entry = RB.RhythmDBEntry.new(self.db, self.entry_type, song.url)
 		self.db.entry_set(entry, RB.RhythmDBPropType.TITLE, song.title.encode('utf-8'))
 		self.db.entry_set(entry, RB.RhythmDBPropType.ALBUM, song.albumtitle.encode('utf-8'))
 		self.db.entry_set(entry, RB.RhythmDBPropType.ARTIST, song.artist.encode('utf-8'))
@@ -86,8 +84,7 @@ class DoubanFMSource(RB.BrowserSource):
 
 	def reset_songs(self, songs):
 		for row in self.props.query_model:
-			entry = row[0]
-			self.db.entry_delete(entry)
+			self.db.entry_delete(row[0])
 		self.songs = songs
 		self.songs_map = {}
 		for song in self.songs:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright (C) 2013 liberize <liberize@gmail.com>
 #
@@ -16,7 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Gio, GObject
+from gi.repository import Gtk, GObject
+from ConfigParser import ConfigParser
 from doubanfm_keys import *
 
 DIALOG_FILE = 'config_dialog.glade'
@@ -32,18 +33,21 @@ class ConfigDialog(GObject.Object):
 		self.ui.add_from_file(PLUGIN_DIR + DIALOG_FILE)
 
 		self.config_box = self.ui.get_object('config_box')
-		self.user_name_entry = self.ui.get_object('user_name_entry')
-		self.user_pwd_entry = self.ui.get_object('user_pwd_entry')
+		self.username_entry = self.ui.get_object('username_entry')
+		self.password_entry = self.ui.get_object('password_entry')
 	
-		self.settings = Gio.Settings(DOUBANFM_SCHEMA)
-		self.user_name_entry.set_text(self.settings[USER_NAME_KEY])	
-		self.user_pwd_entry.set_text(self.settings[USER_PWD_KEY])
+		self.config = ConfigParser()
+		self.config.read(PLUGIN_DIR + CONFIG_FILE)
+		self.username_entry.set_text(self.config.get(MAIN_SECTION, USERNAME_KEY))	
+		self.password_entry.set_text(self.config.get(MAIN_SECTION, PASSWORD_KEY))
 
-		self.user_name_entry.connect('changed', self.on_user_name_entry_changed)
-		self.user_pwd_entry.connect('changed', self.on_user_pwd_entry_changed)
+		self.username_entry.connect('changed', self.on_username_entry_changed)
+		self.password_entry.connect('changed', self.on_password_entry_changed)
 		
-	def on_user_name_entry_changed(self, widget):
-		self.settings[USER_NAME_KEY] = self.user_name_entry.get_text()
+	def on_username_entry_changed(self, widget):
+		self.config.set(MAIN_SECTION, USERNAME_KEY, self.username_entry.get_text())
+		self.config.write(open(PLUGIN_DIR + CONFIG_FILE, 'w'))
 		
-	def on_user_pwd_entry_changed(self, widget):
-		self.settings[USER_PWD_KEY] = self.user_pwd_entry.get_text()
+	def on_password_entry_changed(self, widget):
+		self.config.set(MAIN_SECTION, PASSWORD_KEY, self.password_entry.get_text())
+		self.config.write(open(PLUGIN_DIR + CONFIG_FILE, 'w'))

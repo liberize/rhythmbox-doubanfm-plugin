@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright (C) 2013 liberize <liberize@gmail.com>
 #
@@ -17,7 +17,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import urllib, socket, thread
-from gi.repository import Gio, Gtk, Gdk, GdkPixbuf, GObject, GLib
+from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GLib
+from ConfigParser import ConfigParser
 from libdoubanfm import *
 from doubanfm_keys import *
 
@@ -72,9 +73,10 @@ class LoginDialog(GObject.Object):
 		self.captcha_image.set_from_pixbuf(loader.get_pixbuf())
 
 	def login(self):
-		settings = Gio.Settings(DOUBANFM_SCHEMA)
-		username = settings[USER_NAME_KEY]
-		password = settings[USER_PWD_KEY]
+		config = ConfigParser()
+		config.read(PLUGIN_DIR + CONFIG_FILE)
+		username = config.get(MAIN_SECTION, USERNAME_KEY)
+		password = config.get(MAIN_SECTION, PASSWORD_KEY)
 
 		if username == '' or password == '':
 			self.error_dialog(ERROR_USER_INFO_NOT_SET)

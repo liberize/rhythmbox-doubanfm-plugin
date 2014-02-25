@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright (C) 2013 liberize <liberize@gmail.com>
 #
@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Gio, GObject, RB, Peas, PeasGtk
+from gi.repository import Gtk, Gio, GObject, RB, Peas, PeasGtk, GdkPixbuf
 from doubanfm_keys import *
 from doubanfm_source import DoubanFMSource
 from config_dialog import ConfigDialog
@@ -24,6 +24,7 @@ from channels_sidebar import ChannelsSidebar
 from mini_window import MiniWindow
 
 UI_FILE = 'doubanfm_ui.xml'
+ICON_FILE = 'doubanfm.png'
 
 class DoubanFMEntryType(RB.RhythmDBEntryType):
 	def __init__(self):
@@ -56,10 +57,8 @@ class DoubanFMPlugin(GObject.Object, Peas.Activatable, PeasGtk.Configurable):
 		self.entry_type.can_sync_metadata = True
 		self.entry_type.sync_metadata = None
 
-		# find and load doubanfm icon
-		theme = Gtk.IconTheme.get_default()
-		width, height = Gtk.icon_size_lookup(Gtk.IconSize.LARGE_TOOLBAR)[1:]
-		icon = theme.load_icon('doubanfm', width, 0)
+		# load doubanfm icon from file
+		icon = GdkPixbuf.Pixbuf.new_from_file(PLUGIN_DIR + ICON_FILE)
 
 		# create a source under 'stores' group
 		group = RB.DisplayPageGroup.get_by_id ('stores')
@@ -108,7 +107,7 @@ class DoubanFMPlugin(GObject.Object, Peas.Activatable, PeasGtk.Configurable):
 
 	def build_actions(self):
 		self.actions = [
-			Gtk.Action('FMMenu', '豆瓣FM(_D)', None, None),
+			Gtk.Action('FMMenu', '豆瓣 FM(_D)', None, None),
 			Gtk.Action('FavSong', '喜欢(_F)', None, None),
 			Gtk.Action('DelSong', '不再播放(_D)', None, None),
 			Gtk.Action('SkipSong', '跳过(_S)', None, None),

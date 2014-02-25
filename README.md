@@ -20,27 +20,29 @@
 
 主界面：
 
-![MainWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/images/main.jpg)
+![MainWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/screenshots/main.jpg)
 
 迷你窗口：
 
-![MiniWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/images/mini.jpg)
+![MiniWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/screenshots/mini.jpg)
 
 ## 安装
 
-已测试的 rhythmbox 版本：**2.96 - 2.98**. 不兼容 **2.99.1** 及以后的版本.
+已测试的 rhythmbox 版本：**2.96 - 2.98**. 不兼容 **2.99.1** 及以后的版本。
 
-下载到本地后执行：
+下载到本地后解压到 `~/.local/share/rhythmbox/plugins` 目录（不存在则创建）。
 
-	cd /path/to/your/folder
-	./install.sh
+或者在终端执行：
+
+	cd ~/.local/share/rhythmbox/plugins
+	git clone https://github.com/liberize/rhythmbox-doubanfm-plugin
 
 ## TODO
 
 * 兼容 2.99.1 及以后的版本
 * 无需登录即可使用
 * 无需 PRO 账号即可使用高码率，参考[这里](http://v2ex.com/t/101093)
-* 无需安装，修改图标加载和用户信息存储的方式
+* <del>无需安装，修改图标加载和用户信息存储的方式</del>
 * 登录方式改为模拟客户端登陆，无需验证码，参考[这里](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)
 * 在主窗口模式下显示专辑封面，参考[这里](https://github.com/luqmana/rhythmbox-plugins/blob/master/AlbumArtSearch/AlbumArtSearch.py)
 * 频道分类、搜索、显示详细信息
@@ -54,3 +56,4 @@
 
 * 博客: <http://liberize.me/>
 * 电邮: <liberize@gmail.com>
+

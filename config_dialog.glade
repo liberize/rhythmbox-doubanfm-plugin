@@ -9,9 +9,12 @@
       <object class="GtkLabel" id="msg_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">DoubanFM 插件首选项
-
-感谢您使用本插件。为了使用某些功能，您需要提供您的的douban.com用户名（邮箱）和密码。</property>
+        <property name="margin_left">15</property>
+        <property name="margin_right">15</property>
+        <property name="margin_top">15</property>
+        <property name="margin_bottom">15</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">为了使用某些功能，您需要提供您的豆瓣用户名和密码。</property>
         <property name="wrap">True</property>
       </object>
       <packing>
@@ -27,13 +30,13 @@
         <property name="row_spacing">5</property>
         <property name="column_spacing">5</property>
         <child>
-          <object class="GtkLabel" id="user_name_label">
+          <object class="GtkLabel" id="username_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_left">15</property>
             <property name="margin_right">15</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">邮箱：</property>
+            <property name="label" translatable="yes">用户名：</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -43,7 +46,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="user_pwd_label">
+          <object class="GtkLabel" id="password_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_left">15</property>
@@ -59,13 +62,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="user_name_entry">
-            <property name="width_request">300</property>
+          <object class="GtkEntry" id="username_entry">
+            <property name="width_request">275</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="margin_left">15</property>
             <property name="margin_right">15</property>
-            <property name="max_length">50</property>
             <property name="invisible_char">•</property>
           </object>
           <packing>
@@ -76,13 +77,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="user_pwd_entry">
-            <property name="width_request">300</property>
+          <object class="GtkEntry" id="password_entry">
+            <property name="width_request">275</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="margin_left">15</property>
             <property name="margin_right">15</property>
-            <property name="max_length">50</property>
             <property name="visibility">False</property>
             <property name="invisible_char">•</property>
           </object>
@@ -101,12 +100,13 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLinkButton" id="register_link-button">
+      <object class="GtkLinkButton" id="register_button">
         <property name="label" translatable="yes">没有账号，注册一个</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="has_tooltip">True</property>
+        <property name="margin_top">5</property>
         <property name="relief">none</property>
         <property name="uri">http://www.douban.com/accounts/register</property>
       </object>

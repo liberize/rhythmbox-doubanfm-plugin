@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2008-2012 Sun Ning <classicning@gmail.com>
-# Copyright (C) 2012 Yu Shijun <yushijun110@gmail.com>
-# Copyright (C) 2012 Liu Guyue <watermelonlh@gmail.com>
 # Copyright (C) 2013 liberize <liberize@gmail.com>
 # 
 # This program is free software; you can redistribute it and/or modify
@@ -68,20 +65,16 @@ class DoubanFM(object):
 
 	def __load_channels(self):
 		f = urllib.urlopen('http://www.douban.com/j/app/radio/channels')
-		# f = urllib.urlopen('http://www.douban.com/j/app/radio/channels?version=100&app_name=radio_desktop_win')
 		data = f.read()
 		f.close()
 		channels = json.loads(data)
 		self.channels = {}
-		# Red Heart
-		# self.channels[-3] = 'Red Heart'
 		self.channels[-3] = '红心兆赫'
-		# Personal Radio High
 		# self.channels[-4] = 'Personal Radio High'
-		# Personal Radio Easy
 		# self.channels[-5] = 'Personal Radio Easy'
 		for channel in channels['channels']:
-			self.channels[channel['channel_id']] = channel['name']
+			channel_id = int(channel['channel_id'])
+			self.channels[channel_id] = channel['name']
 
 	def login(self, captcha_id, captcha_solution, callback):
 		"""
@@ -283,7 +276,7 @@ class DoubanFM(object):
 	def played_list(self, sid, history, callback):
 		"""
 		request more playlist items
-		* history - your playlist history(played songs and skipped songs)
+		* history - your playlist history (played songs and skipped songs)
 		"""
 		if self.lock.acquire(0):
 			params = self.__get_default_params('p')

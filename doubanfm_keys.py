@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright (C) 2013 liberize <liberize@gmail.com>
 #
@@ -19,6 +19,7 @@
 import os
 
 PLUGIN_DIR = os.path.dirname(os.path.realpath(__file__)) + '/'
-DOUBANFM_SCHEMA = 'org.gnome.rhythmbox.plugins.doubanfm'
-USER_NAME_KEY = 'username'
-USER_PWD_KEY = 'userpwd'
+CONFIG_FILE = 'doubanfm.conf'
+MAIN_SECTION = 'main'
+USERNAME_KEY = 'username'
+PASSWORD_KEY = 'password'
