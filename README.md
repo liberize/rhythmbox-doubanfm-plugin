@@ -1,41 +1,56 @@
-# Rhythmbox DoubanFM Plugin
+# Rhythmbox 豆瓣 FM 插件
 
-Rhythmbox doubanfm plugin is a desktop client for the online music service, [Douban radio](http://douban.fm "Douban FM"). It provides full functionality of douban radio service, and linux desktop integration.
+**本插件停止开发。如果你有兴趣继续开发，我可以尽我所能提供一些指导。在此向已安装的用户致歉。**
 
-## Introduction
+本项目是一个 Rhythmbox 插件，旨在将[豆瓣 FM ](http://douban.fm)功能集成到 Rhythmbox 中。
 
-This plugin will create a source in the left sidebar of rhythmbox. When activated, you can
+## 简介
 
-* Like/skip/del a song and refresh playlist.
-* Switch channel in the right sidebar.
+安装插件后，Rhythmbox 左侧边栏会增加一个豆瓣 FM 入口。你可以：
 
-There is a minimized view for DoubanFM tracks. When activated, you can:
+* 加红心、不再播放、下一首
+* 显示当前播放列表以及歌曲的详细信息
+* 在右边栏中切换频道，支持公共兆赫、红心兆赫、私人兆赫
 
-* Control music playing, like/skip/del a song and set window to keep above.
-* Automatically retrieve and display album art from douban.com.
-* Share music and album to douban, sina, kaixin001, renren, fanfou and twitter.
+另外，还有一个迷你窗口，可以通过菜单或工具栏按钮打开。你可以：
 
-MainWindow:
+* 控制音乐播放，加红心、不再播放、下一首，设置窗口置顶
+* 自动获取并显示专辑封面
+* 分享到豆瓣、新浪、开心网、人人、饭否等网站
+
+主界面：
 
 ![MainWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/images/main.jpg)
 
-MiniWindow:
+迷你窗口：
 
 ![MiniWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/images/mini.jpg)
 
-## Install
+## 安装
 
-Tested with rhythmbox **version 2.96, 2.98**.
+已测试的 rhythmbox 版本：**2.96 - 2.98**. 不兼容 **2.99.1** 及以后的版本.
 
-Clone the repository to your local disk, and do as follows:
+下载到本地后执行：
 
 	cd /path/to/your/folder
 	./install.sh
 
-*Notice: root privilege is required because username and password are stored with gsettings.*
+## TODO
 
-## Contact
+* 兼容 2.99.1 及以后的版本
+* 无需登录即可使用
+* 无需 PRO 账号即可使用高码率，参考[这里](http://v2ex.com/t/101093)
+* 无需安装，修改图标加载和用户信息存储的方式
+* 登录方式改为模拟客户端登陆，无需验证码，参考[这里](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)
+* 在主窗口模式下显示专辑封面，参考[这里](https://github.com/luqmana/rhythmbox-plugins/blob/master/AlbumArtSearch/AlbumArtSearch.py)
+* 频道分类、搜索、显示详细信息
+* 迷你窗口下点击专辑封面查看专辑信息
+* 快捷键操作
+* 开放 DBus 接口
+* 显示歌词
+* 顶栏指示器
 
-* @liberize: <https://github.com/liberize>
-* Blog Page: <http://liberize.me/>
-* Email: <liberize@gmail.com>
+## 关于
+
+* 博客: <http://liberize.me/>
+* 电邮: <liberize@gmail.com>
