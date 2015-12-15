@@ -20,11 +20,11 @@
 
 主界面：
 
-![MainWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/screenshots/main.jpg)
+![MainWindow](https://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/screenshots/main.jpg)
 
 迷你窗口：
 
-![MiniWindow](http://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/screenshots/mini.jpg)
+![MiniWindow](https://github.com/liberize/rhythmbox-doubanfm-plugin/raw/master/screenshots/mini.jpg)
 
 ## 安装
 
